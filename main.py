@@ -51,7 +51,7 @@ def post_task(task: TaskCreate):
                     "priority": priority,
                     "status": task.status,
                     "assigned_to": task.assigned_to,
-                    "due_date": task.due_date,
+                    "due_date": task.due_date.isoformat() if task.due_date else None,
                     "extracted_entities": entities,
                     "suggested_actions": actions,
                 }
@@ -160,7 +160,7 @@ def update_task(id: str, task: TaskUpdate):
         for u_k, u_v in response.data[0].items():
             if u_k in old_value:
                 updated_task[u_k] = u_v
-                
+
         if "status" in update_data and update_data["status"] == "completed":
             log_task_history(
                 task_id=updated_task["task_id"],
